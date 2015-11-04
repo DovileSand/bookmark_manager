@@ -22,7 +22,7 @@ class BookmarkManager < Sinatra::Base
   end
 
   post '/links/saving' do
-    link = Link.create(url:params[:url], title:params[:title], )
+    link = Link.create(url:params[:url], title:params[:title])
     tag = Tag.create(name:params[:tag])
     link.tags << tag
     link.save
