@@ -1,13 +1,14 @@
 ENV['RACK_ENV'] = 'test'
 
 require 'capybara/rspec'
+# require 'dm-postgres-adapter'
+require './app/data_mapper_setup'
 require './app/models/link'
 require './app/models/tag'
 require './app/app'
 require 'database_cleaner'
 
 Capybara.app = BookmarkManager
-
 
 RSpec.configure do |config|
 
@@ -26,12 +27,18 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
   end
 
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
+  # config.before(:each) do
+  #   DatabaseCleaner.start
+  # end
 
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
+  config.around(:each) do |example|
+    DatabaseCleaner.cleaning do
+      example.run
+    end
+
+  # config.after(:each) do
+  #   DatabaseCleaner.clean
+  # end
+
 
 end
